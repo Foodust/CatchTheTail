@@ -31,4 +31,11 @@ public class ConfigModule {
             Bukkit.getLogger().info(e.getMessage());
         }
     }
+
+    public void initialize() {
+    }
+
+    public void release() {
+
+    }
 }

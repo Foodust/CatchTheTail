@@ -12,7 +12,7 @@ public enum BaseMessage {
 
     // prefix
     PREFIX(""),
-    PREFIX_C("as"),
+    PREFIX_C("<gradiant:green:blue><bold>[꼬리잡기]</bold></gradiant> "),
 
     // command
     COMMAND_(""),
@@ -21,7 +21,7 @@ public enum BaseMessage {
     DEFAULT("기본"),
         // Error
     ERROR("에러"),
-    ERROR_COMMAND(ChatColor.DARK_RED + "잘못된 명령어입니다.")
+    ERROR_COMMAND("<red><bold>잘못된 명령어입니다.")
     ;
 
     private final String message;

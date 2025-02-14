@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.foodust.catchTheTail.BaseModule.ConfigModule;
 import org.foodust.catchTheTail.Command.CommandManager;
 import org.foodust.catchTheTail.Data.TaskData;
 import org.foodust.catchTheTail.Event.EventManager;
@@ -33,12 +34,13 @@ public final class CatchTheTail extends JavaPlugin {
         this.plugin = this;
         CommandManager commandManager = new CommandManager(this);
         EventManager eventManager = new EventManager(this.getServer(), this);
+        new ConfigModule(this).initialize();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-
+        new ConfigModule(this).release();
         if (this.adventure != null) {
             this.adventure.close();
             this.adventure = null;
