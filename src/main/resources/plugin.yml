@@ -1,0 +1,7 @@
+name: CatchTheTail
+version: '1.0-SNAPSHOT'
+main: org.foodust.catchTheTail.CatchTheTail
+api-version: '1.21'
+authors: [ Foodust ]
+description: SOOP Api On Plugin
+website: http://github.com/foodust/SoopOnPlugin
