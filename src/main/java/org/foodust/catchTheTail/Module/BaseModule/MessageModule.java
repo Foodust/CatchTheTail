@@ -1,4 +1,4 @@
-package org.foodust.catchTheTail.BaseModule;
+package org.foodust.catchTheTail.Module.BaseModule;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;

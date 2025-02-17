@@ -1,4 +1,4 @@
-package org.foodust.catchTheTail.BaseModule;
+package org.foodust.catchTheTail.Module.BaseModule;
 
 // Josa 를 붙이기 위함
 public class HangulModule {

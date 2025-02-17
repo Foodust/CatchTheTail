@@ -1,4 +1,4 @@
-package org.foodust.catchTheTail.BaseModule;
+package org.foodust.catchTheTail.Module.BaseModule;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

@@ -1,9 +1,10 @@
-package org.foodust.catchTheTail.BaseModule;
+package org.foodust.catchTheTail.Module.BaseModule;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.foodust.catchTheTail.CatchTheTail;
+import org.foodust.catchTheTail.Data.GameData;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,9 +34,13 @@ public class ConfigModule {
     }
 
     public void initialize() {
+        getBaseItem();
     }
 
     public void release() {
+        GameData.release();
+    }
+    public void getBaseItem(){
 
     }
 }

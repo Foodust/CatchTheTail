@@ -15,8 +15,12 @@ public enum BaseMessage {
     PREFIX_C("<gradiant:green:blue><bold>[꼬리잡기]</bold></gradiant> "),
 
     // command
-    COMMAND_(""),
-
+    COMMAND_CATCH_THE_TAIL("꼬리잡기"),
+    COMMAND_START("시작"),
+    COMMAND_STOP("종료"),
+    COMMAND_ADD("등록"),
+    COMMAND_ITEM_ADD("아이템등록"),
+    COMMAND_RELOAD("리로드"),
     // 기본
     DEFAULT("기본"),
         // Error
@@ -33,7 +37,7 @@ public enum BaseMessage {
     private static final Map<String, BaseMessage> commandInfo = new HashMap<>();
 
     static {
-        for (BaseMessage baseMessage : EnumSet.range(COMMAND_, COMMAND_)) {
+        for (BaseMessage baseMessage : EnumSet.range(COMMAND_CATCH_THE_TAIL, COMMAND_RELOAD)) {
             commandInfo.put(baseMessage.message, baseMessage);
         }
     }
