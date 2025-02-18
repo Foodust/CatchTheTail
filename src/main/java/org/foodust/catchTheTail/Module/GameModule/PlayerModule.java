@@ -21,9 +21,6 @@ public class PlayerModule {
     public void setupPlayer(Player player) {
         PlayerInfo info = new PlayerInfo(player);
         GameData.gamePlayers.put(player, info);
-
-        // 인벤토리 슬롯 1, 2에 실제/가짜 꼬리 지급
-        tailModule.giveTailWools(player);
         // 기본 아이템 지급
         giveBaseItems(player);
     }
