@@ -21,7 +21,7 @@ public class CommandModule {
     }
 
     public void commandStop(CommandSender sender, String[] data) {
-
+        configModule.initialize();
     }
 
     public void commandAdd(CommandSender sender, String[] data) {

@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.foodust.catchTheTail.CatchTheTail;
+import org.foodust.catchTheTail.Data.AnimateData;
 import org.foodust.catchTheTail.Data.GameData;
+import org.foodust.catchTheTail.Data.TaskData;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +17,7 @@ public class ConfigModule {
     public ConfigModule(CatchTheTail plugin) {
         this.plugin = plugin;
     }
+
     public FileConfiguration getConfig(String fileName) {
         File configFile = new File(plugin.getDataFolder(), fileName);
         if (!configFile.exists()) {
@@ -29,7 +32,7 @@ public class ConfigModule {
         try {
             config.save(configFile);
         } catch (IOException e) {
-            Bukkit.getLogger().info(e.getMessage());
+            plugin.getLog().info(e.getMessage());
         }
     }
 
@@ -39,8 +42,11 @@ public class ConfigModule {
 
     public void release() {
         GameData.release();
+        TaskData.release();
+        AnimateData.release();
     }
-    public void getBaseItem(){
+
+    public void getBaseItem() {
 
     }
 }

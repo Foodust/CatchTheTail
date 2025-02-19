@@ -4,10 +4,12 @@ import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.foodust.catchTheTail.CatchTheTail;
 import org.foodust.catchTheTail.Data.GameData;
 import org.foodust.catchTheTail.Data.Info.PlayerInfo;
+import org.foodust.catchTheTail.Data.TaskData;
 
 public class PlayerModule {
     private final CatchTheTail plugin;
@@ -38,12 +40,10 @@ public class PlayerModule {
             masterInfo.getSlaves().add(slave);
 
             // 노예 플레이어를 주인 근처로 계속 텔레포트
-            new BukkitRunnable() {
+            BukkitTask bukkitTask = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (!GameData.isGameRunning ||
-                            slave.getWorld() != master.getWorld() ||
-                            masterInfo.isEliminated()) {
+                    if (!GameData.isGameRunning || slave.getWorld() != master.getWorld() ||masterInfo.isEliminated()) {
                         this.cancel();
                         return;
                     }
@@ -51,13 +51,13 @@ public class PlayerModule {
                     Location masterLoc = master.getLocation();
                     Location slaveLoc = slave.getLocation();
 
-                    if (slaveLoc.distance(masterLoc) > 8) {
-                        Vector direction = masterLoc.toVector().subtract(slaveLoc.toVector()).normalize();
-                        Location newLoc = slaveLoc.add(direction.multiply(0.5));
-                        slave.teleport(newLoc);
+                    if (slaveLoc.distance(masterLoc) > 2) {
+                        Vector direction = masterLoc.toVector().subtract(slaveLoc.toVector()).normalize().multiply(1.1);
+                        slave.setVelocity(direction);
                     }
                 }
             }.runTaskTimer(plugin, 0L, 1L);
+            TaskData.TASKS.add(bukkitTask);
         }
     }
 }

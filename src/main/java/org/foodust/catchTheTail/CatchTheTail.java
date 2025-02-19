@@ -45,6 +45,5 @@ public final class CatchTheTail extends JavaPlugin {
             this.adventure.close();
             this.adventure = null;
         }
-        TaskData.release();
     }
 }
