@@ -1,8 +1,8 @@
 package org.foodust.catchTheTail.Module.GameModule;
 
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.foodust.catchTheTail.CatchTheTail;
 import org.foodust.catchTheTail.Data.GameData;
@@ -18,7 +18,6 @@ public class GameModule {
     }
 
     public void checkTailCatch(Player attacker, Player victim) {
-
         ItemStack attackerColorWool = attacker.getInventory().getItem(0);
         ItemStack victimColorWool = victim.getInventory().getItem(0);
         if (attackerColorWool == null || victimColorWool == null) return;
@@ -30,6 +29,15 @@ public class GameModule {
         } else {
             // 잘못된 꼬리 잡기
             playerModule.bindPlayers(victim, attacker);
+        }
+    }
+
+    public void checkAttackSlaveToMaster(EntityDamageByEntityEvent event, Player attacker, Player victim) {
+        PlayerInfo victimInfo = GameData.gamePlayers.get(victim);
+        PlayerInfo attackerInfo = GameData.gamePlayers.get(attacker);
+
+        if (victimInfo.getSlaves().contains(attacker)) {
+            event.setCancelled(true);
         }
     }
 }

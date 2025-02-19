@@ -3,6 +3,8 @@ package org.foodust.catchTheTail.Event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.foodust.catchTheTail.CatchTheTail;
 import org.foodust.catchTheTail.Module.GameModule.GameModule;
@@ -21,5 +23,12 @@ public class PlayerEvent implements Listener {
         Player victim = event.getEntity();
         if (!(victim.getKiller() instanceof Player attacker)) return;
         gameModule.checkTailCatch(attacker, victim);
+    }
+
+    @EventHandler
+    public void playerEntityDamageEvent(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player attacker)) return;
+        if (!(event.getEntity() instanceof Player victim)) return;
+        gameModule.checkAttackSlaveToMaster(event, attacker, victim);
     }
 }
