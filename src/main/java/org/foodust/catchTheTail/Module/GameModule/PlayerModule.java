@@ -2,6 +2,8 @@ package org.foodust.catchTheTail.Module.GameModule;
 
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -36,6 +38,15 @@ public class PlayerModule {
         PlayerInfo slaveInfo = GameData.gamePlayers.get(slave);
 
         if (masterInfo != null && slaveInfo != null) {
+            try{
+                slave.registerAttribute(Attribute.SCALE);
+                AttributeInstance attribute = slave.getAttribute(Attribute.SCALE);
+                if(attribute != null) {
+                    attribute.setBaseValue(0.7);
+                }
+            }catch (Exception ignore){
+            }
+
             slaveInfo.setMaster(master);
             masterInfo.getSlaves().add(slave);
 
