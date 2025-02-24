@@ -22,15 +22,15 @@ public class PlayerModule {
         this.tailModule = new TailModule(plugin);
     }
 
-    public void setupPlayer(Player player) {
-        PlayerInfo info = new PlayerInfo(player);
+    public void setupPlayer(Player player, int index) {
+        PlayerInfo info = PlayerInfo.builder()
+                .player(player)
+                .index(index)
+                .build();
         GameData.gamePlayers.put(player, info);
-        // 기본 아이템 지급
-        giveBaseItems(player);
     }
 
-
-    private void giveBaseItems(Player player) {
+    public void giveBaseItems(Player player, int index) {
     }
 
     public void bindPlayers(Player master, Player slave) {
@@ -38,13 +38,13 @@ public class PlayerModule {
         PlayerInfo slaveInfo = GameData.gamePlayers.get(slave);
 
         if (masterInfo != null && slaveInfo != null) {
-            try{
+            try {
                 slave.registerAttribute(Attribute.SCALE);
                 AttributeInstance attribute = slave.getAttribute(Attribute.SCALE);
-                if(attribute != null) {
+                if (attribute != null) {
                     attribute.setBaseValue(0.7);
                 }
-            }catch (Exception ignore){
+            } catch (Exception ignore) {
             }
 
             slaveInfo.setMaster(master);
@@ -54,7 +54,7 @@ public class PlayerModule {
             BukkitTask bukkitTask = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (!GameData.isGameRunning || slave.getWorld() != master.getWorld() ||masterInfo.isEliminated()) {
+                    if (!GameData.isGameRunning || slave.getWorld() != master.getWorld() || masterInfo.isEliminated()) {
                         this.cancel();
                         return;
                     }

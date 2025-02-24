@@ -1,7 +1,6 @@
 package org.foodust.catchTheTail.Data.Info;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -9,15 +8,19 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlayerInfo {
-    private Player player;
-    private Player master;           // 노예가 된 경우 주인
-    private List<Player> slaves;     // 자신의 노예들
-    private boolean eliminated;      // 탈락 여부
+    @Builder.Default
+    private Player player = null;
+    @Builder.Default
+    private Player master = null;
+    @Builder.Default
+    private List<Player> slaves = new ArrayList<>();
+    @Builder.Default
+    private boolean eliminated = false;      // 탈락 여부
+    @Builder.Default
+    private int index = -1;
 
-    public PlayerInfo(Player player) {
-        this.player = player;
-        this.slaves = new ArrayList<>();
-        this.eliminated = false;
-    }
 }
