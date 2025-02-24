@@ -21,6 +21,6 @@ public class PlayerInfo {
     @Builder.Default
     private boolean eliminated = false;      // 탈락 여부
     @Builder.Default
-    private int index = -1;
+    private String index = "-1";
 
 }

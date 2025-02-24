@@ -29,7 +29,7 @@ public class CommandModule {
         }
 
         GameData.gamePlayers.forEach((player, playerInfo) -> {
-            playerModule.giveBaseItems(player, playerInfo.getIndex());
+            configModule.getBaseItem(player, playerInfo.getIndex());
         });
 
         GameData.isGameRunning = true;
@@ -38,6 +38,7 @@ public class CommandModule {
 
     public void commandStop(CommandSender sender, String[] data) {
         configModule.initialize();
+        messageModule.broadcastMessageC("게임이 종료 되었습니다.");
     }
 
     public void commandAdd(CommandSender sender, String[] data) {
@@ -51,16 +52,26 @@ public class CommandModule {
             if (player == null) {
                 messageModule.sendPlayerC(sender, playerName + " 는 등록되지 않았습니다.");
             } else {
-                playerModule.setupPlayer(player, i);
+                playerModule.setupPlayer(player, String.valueOf(i));
             }
         }
     }
 
     public void commandItemAdd(CommandSender sender, String[] data) {
-
+        if (data.length < 2) {
+            messageModule.sendPlayerC(sender, "번호를 지정해주세요.");
+            return;
+        }
+        if (!(sender instanceof Player player)) return;
+        if (configModule.setBaseItem(player, data[0])) {
+            messageModule.sendPlayerC(sender,"아이템 설정이 완료 되었습니다. 번호 : " + data[0]);
+        }else{
+            messageModule.sendPlayerC(sender,"<red>아이템 설정이 잘못 되었습니다.</red>");
+        }
     }
 
     public void commandReload(CommandSender sender, String[] data) {
+        configModule.initialize();
         messageModule.sendPlayerC(sender, "리로드 되었습니다.");
     }
 

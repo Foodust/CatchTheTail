@@ -22,15 +22,12 @@ public class PlayerModule {
         this.tailModule = new TailModule(plugin);
     }
 
-    public void setupPlayer(Player player, int index) {
+    public void setupPlayer(Player player,String index) {
         PlayerInfo info = PlayerInfo.builder()
                 .player(player)
                 .index(index)
                 .build();
         GameData.gamePlayers.put(player, info);
-    }
-
-    public void giveBaseItems(Player player, int index) {
     }
 
     public void bindPlayers(Player master, Player slave) {

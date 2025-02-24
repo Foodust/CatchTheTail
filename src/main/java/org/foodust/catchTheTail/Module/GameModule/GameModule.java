@@ -34,8 +34,6 @@ public class GameModule {
 
     public void checkAttackSlaveToMaster(EntityDamageByEntityEvent event, Player attacker, Player victim) {
         PlayerInfo victimInfo = GameData.gamePlayers.get(victim);
-        PlayerInfo attackerInfo = GameData.gamePlayers.get(attacker);
-
         if (victimInfo.getSlaves().contains(attacker)) {
             event.setCancelled(true);
         }
