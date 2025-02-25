@@ -52,3 +52,6 @@ processResources {
         expand props
     }
 }
+tasks.named('compileJava') {
+    doNotTrackState("Temporary workaround for file tracking issue")
+}

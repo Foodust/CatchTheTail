@@ -6,10 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.foodust.catchTheTail.Module.BaseModule.ConfigModule;
 import org.foodust.catchTheTail.Command.CommandManager;
-import org.foodust.catchTheTail.Data.TaskData;
 import org.foodust.catchTheTail.Event.EventManager;
+import org.foodust.catchTheTail.Module.BaseModule.ConfigModule;
 
 import java.util.logging.Logger;
 
