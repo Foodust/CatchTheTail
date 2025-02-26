@@ -13,6 +13,7 @@ public class CommandModule {
     private final CatchTheTail plugin;
     private final ConfigModule configModule;
     private final PlayerModule playerModule;
+    private final TailModule tailModule;
     private final MessageModule messageModule;
 
     public CommandModule(CatchTheTail plugin) {
@@ -20,6 +21,7 @@ public class CommandModule {
         this.configModule = new ConfigModule(plugin);
         this.playerModule = new PlayerModule(plugin);
         this.messageModule = new MessageModule(plugin);
+        this.tailModule = new TailModule(plugin);
     }
 
     public void commandStart(CommandSender sender, String[] data) {
@@ -34,6 +36,7 @@ public class CommandModule {
 
         GameData.isGameRunning = true;
         messageModule.broadcastMessageC("게임이 시작 되었습니다!");
+        tailModule.initializeColors();
     }
 
     public void commandStop(CommandSender sender, String[] data) {

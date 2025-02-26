@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.foodust.catchTheTail.CatchTheTail;
+import org.foodust.catchTheTail.Data.GameData;
 import org.foodust.catchTheTail.Module.GameModule.GameModule;
 import org.foodust.catchTheTail.Module.GameModule.PlayerModule;
 
@@ -20,6 +21,7 @@ public class PlayerEvent implements Listener {
 
     @EventHandler
     public void playerDeathEvent(PlayerDeathEvent event) {
+        if(!GameData.isGameRunning) return;
         Player victim = event.getEntity();
         if (!(victim.getKiller() instanceof Player attacker)) return;
         gameModule.checkTailCatch(attacker, victim);
@@ -27,6 +29,7 @@ public class PlayerEvent implements Listener {
 
     @EventHandler
     public void playerEntityDamageEvent(EntityDamageByEntityEvent event) {
+        if(!GameData.isGameRunning) return;
         if (!(event.getDamager() instanceof Player attacker)) return;
         if (!(event.getEntity() instanceof Player victim)) return;
         gameModule.checkAttackSlaveToMaster(event, attacker, victim);

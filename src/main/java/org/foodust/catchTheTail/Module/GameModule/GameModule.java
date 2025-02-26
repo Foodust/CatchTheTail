@@ -11,17 +11,18 @@ import org.foodust.catchTheTail.Data.Info.PlayerInfo;
 public class GameModule {
     private final CatchTheTail plugin;
     private final PlayerModule playerModule;
-
+    private final TailModule tailModule;
     public GameModule(CatchTheTail plugin) {
         this.plugin = plugin;
         this.playerModule = new PlayerModule(plugin);
+        this.tailModule = new TailModule(plugin);
     }
 
     public void checkTailCatch(Player attacker, Player victim) {
         ItemStack attackerColorWool = attacker.getInventory().getItem(0);
         ItemStack victimColorWool = victim.getInventory().getItem(0);
         if (attackerColorWool == null || victimColorWool == null) return;
-        Material shouldCatch = TailModule.getNextColor(attackerColorWool.getType());
+        Material shouldCatch = tailModule.getNextColor(attackerColorWool.getType());
 
         if (victimColorWool.getType() == shouldCatch) {
             // 성공적인 꼬리 잡기

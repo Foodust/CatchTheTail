@@ -66,7 +66,7 @@ public class ConfigModule {
                 .getKeys(false)
                 .stream()
                 .toList();
-        String lastKey = keys.isEmpty() ? "0" : keys.getLast();
+        String lastKey = keys.isEmpty() ? "0" : keys.get(keys.size() - 1);
         int i = Integer.parseInt(lastKey) + 1;
         config.set(index + "." + i, serialized);
         saveConfig(config, "baseItem.yml");
@@ -75,11 +75,14 @@ public class ConfigModule {
 
     public void getBaseItem(Player player, String index) {
         FileConfiguration config = getConfig("baseItem.yml");
-        for (String key : Objects.requireNonNull(config.getConfigurationSection(index)).getKeys(false)) {
-            String base = config.getString(index + "." + key);
-            ItemStack itemStack = itemSerialize.deserializeItem(base);
-            if (itemStack == null) continue;
-            player.getInventory().addItem(itemStack);
+        try {
+            for (String key : Objects.requireNonNull(config.getConfigurationSection(index)).getKeys(false)) {
+                String base = config.getString(index + "." + key);
+                ItemStack itemStack = itemSerialize.deserializeItem(base);
+                if (itemStack == null) continue;
+                player.getInventory().addItem(itemStack);
+            }
+        } catch (Exception ignore) {
         }
     }
 }
