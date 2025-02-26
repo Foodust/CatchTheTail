@@ -46,13 +46,14 @@ public class CommandModule {
             messageModule.sendPlayerC(sender, "플레이어를 지정해야 합니다.");
             return;
         }
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 1; i < data.length; i++) {
             String playerName = data[i];
             Player player = Bukkit.getPlayer(playerName);
             if (player == null) {
                 messageModule.sendPlayerC(sender, playerName + " 는 등록되지 않았습니다.");
             } else {
                 playerModule.setupPlayer(player, String.valueOf(i));
+                messageModule.sendPlayerC(sender, playerName + " 는 등록 되었습니다.");
             }
         }
     }
@@ -63,8 +64,8 @@ public class CommandModule {
             return;
         }
         if (!(sender instanceof Player player)) return;
-        if (configModule.setBaseItem(player, data[0])) {
-            messageModule.sendPlayerC(sender,"아이템 설정이 완료 되었습니다. 번호 : " + data[0]);
+        if (configModule.setBaseItem(player, data[1])) {
+            messageModule.sendPlayerC(sender,"아이템 설정이 완료 되었습니다. 번호 : " + data[1]);
         }else{
             messageModule.sendPlayerC(sender,"<red>아이템 설정이 잘못 되었습니다.</red>");
         }
