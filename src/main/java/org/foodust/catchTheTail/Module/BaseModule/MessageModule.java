@@ -52,7 +52,7 @@ public class MessageModule {
     }
 
     public void sendPlayerC(Player player, String... arg) {
-        Component deserialize = miniMessage.deserialize(ChatColor.stripColor(makeString(arg)));
+        Component deserialize = miniMessage.deserialize(makeString(arg));
         bukkitAudiences.player(player).sendMessage(prefixC.append(deserialize));
     }
 
@@ -61,11 +61,11 @@ public class MessageModule {
     }
 
     public void sendPlayerC(CommandSender player, String... arg) {
-        bukkitAudiences.player((Player) player).sendMessage(prefixC.append(miniMessage.deserialize(ChatColor.stripColor(makeString(arg)))));
+        bukkitAudiences.player((Player) player).sendMessage(prefixC.append(miniMessage.deserialize(makeString(arg))));
     }
 
     public void sendPlayerC(Player player, String word, HangulModule.Josa josa, String... arg) {
-        Component deserialize = miniMessage.deserialize(hangulModule.getJosa(word, josa) + ChatColor.stripColor(makeString(arg)));
+        Component deserialize = miniMessage.deserialize(hangulModule.getJosa(word, josa) + makeString(arg));
         bukkitAudiences.player(player).sendMessage(prefixC.append(deserialize));
     }
 
@@ -89,7 +89,7 @@ public class MessageModule {
 
     public void sendAllPlayerC(String... arg) {
         Bukkit.getOnlinePlayers().forEach(player -> {
-            sendPlayerC(player, ChatColor.stripColor(makeString(arg)));
+            sendPlayerC(player, makeString(arg));
         });
     }
 
@@ -152,9 +152,10 @@ public class MessageModule {
     public void sendTitle(Player player, Component main, Integer fadeIn, Integer duration, Integer fadeOut) {
         bukkitAudiences.player(player).showTitle(Title.title(main, miniMessage.deserialize(""), Title.Times.times(Duration.ofSeconds(fadeIn), Duration.ofSeconds(duration), Duration.ofSeconds(fadeOut))));
     }
+
     public void broadcastMessageC(String... arg) {
         Audience players = bukkitAudiences.players();
-        players.sendMessage(prefixC.append(miniMessage.deserialize(ChatColor.stripColor(makeString(arg)))));
+        players.sendMessage(prefixC.append(miniMessage.deserialize(makeString(arg))));
     }
 
     public void broadcastMessageC(Component arg) {
@@ -163,23 +164,24 @@ public class MessageModule {
     }
 
     public void broadcastMessageNoPrefix(String... arg) {
-        Bukkit.broadcastMessage(makeString(arg));
+        Bukkit.broadcast(Component.text(makeString(arg)));
     }
 
     public void broadcastMessageNoPrefix(Component arg) {
         Audience players = bukkitAudiences.players();
         players.sendMessage(arg);
     }
+
     public void broadcastMessage(String... arg) {
-        Bukkit.broadcastMessage(prefix + makeString(arg));
+        Bukkit.broadcast(Component.text(prefix + makeString(arg)));
     }
 
     public void broadcastMessage(HangulModule.Josa josa, String... arg) {
-        Bukkit.broadcastMessage(prefix + makeString(arg));
+        Bukkit.broadcast(Component.text(prefix + makeString(arg)));
     }
 
     public void broadcastMessageNoPrefix(HangulModule.Josa josa, String... arg) {
-        Bukkit.broadcastMessage(makeString(arg));
+        Bukkit.broadcast(Component.text(makeString(arg)));
     }
 
     public void sendPlayerActionBar(Player player, String... arg) {

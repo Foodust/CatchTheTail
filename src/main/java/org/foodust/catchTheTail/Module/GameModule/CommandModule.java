@@ -8,6 +8,9 @@ import org.foodust.catchTheTail.Data.GameData;
 import org.foodust.catchTheTail.Module.BaseModule.ConfigModule;
 import org.foodust.catchTheTail.Module.BaseModule.MessageModule;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class CommandModule {
 
     private final CatchTheTail plugin;
@@ -49,8 +52,9 @@ public class CommandModule {
             messageModule.sendPlayerC(sender, "플레이어를 지정해야 합니다.");
             return;
         }
-        for (int i = 1; i < data.length; i++) {
-            String playerName = data[i];
+        List<String> playerNames = new ArrayList<>(new HashSet<>(Arrays.asList(data).subList(1, data.length)));
+        for (int i = 1; i < playerNames.size(); i++) {
+            String playerName = playerNames.get(i);
             Player player = Bukkit.getPlayer(playerName);
             if (player == null) {
                 messageModule.sendPlayerC(sender, playerName + " 는 등록되지 않았습니다.");
@@ -68,9 +72,9 @@ public class CommandModule {
         }
         if (!(sender instanceof Player player)) return;
         if (configModule.setBaseItem(player, data[1])) {
-            messageModule.sendPlayerC(sender,"아이템 설정이 완료 되었습니다. 번호 : " + data[1]);
-        }else{
-            messageModule.sendPlayerC(sender,"<red>아이템 설정이 잘못 되었습니다.</red>");
+            messageModule.sendPlayerC(sender, "아이템 설정이 완료 되었습니다. 번호 : " + data[1]);
+        } else {
+            messageModule.sendPlayerC(sender, "<red>아이템 설정이 잘못 되었습니다.</red>");
         }
     }
 

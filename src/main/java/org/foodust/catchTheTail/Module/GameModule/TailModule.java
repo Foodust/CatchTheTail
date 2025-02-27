@@ -1,13 +1,11 @@
 package org.foodust.catchTheTail.Module.GameModule;
 
-import com.mojang.brigadier.Message;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.foodust.catchTheTail.CatchTheTail;
 import org.foodust.catchTheTail.Data.GameData;
-import org.foodust.catchTheTail.Data.Info.TailInfo;
+import org.foodust.catchTheTail.Data.GameData;
 import org.foodust.catchTheTail.Module.BaseModule.MessageModule;
 
 import java.util.Arrays;
@@ -22,15 +20,12 @@ public class TailModule {
     }
 
     public void initializeColors() {
-        TailInfo.activeColors.addAll(Arrays.asList(TailInfo.COLORS).subList(0, Math.min(GameData.gamePlayers.size(), TailInfo.COLORS.length)));
+        GameData.activeColors.addAll(Arrays.asList(GameData.COLORS).subList(0, Math.min(GameData.gamePlayers.size(), GameData.COLORS.length)));
     }
 
     public Material getNextColor(Material currentColor) {
-        for (Material activeColor : TailInfo.activeColors) {
-            Bukkit.broadcast(Component.text(activeColor.name()));
-        }
-        int index = TailInfo.activeColors.indexOf(currentColor);
-        return TailInfo.activeColors.get((index + 1) % TailInfo.activeColors.size());
+        int index = GameData.activeColors.indexOf(currentColor);
+        return GameData.activeColors.get((index + 1) % GameData.activeColors.size());
     }
 
 }

@@ -12,7 +12,7 @@ public enum BaseMessage {
 
     // prefix
     PREFIX(""),
-    PREFIX_C("<gradiant:green:blue><bold>[꼬리잡기]</bold></gradiant> "),
+    PREFIX_C("<gradient:green:blue><bold>[꼬리잡기]</bold></gradient> "),
 
     // command
     COMMAND_CATCH_THE_TAIL("꼬리잡기"),

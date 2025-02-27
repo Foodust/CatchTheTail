@@ -15,13 +15,16 @@ import java.util.stream.Stream;
 public class CommandSub implements TabCompleter {
 
     Set<String> mainSub = new HashSet<>(EnumSet.range(BaseMessage.COMMAND_START, BaseMessage.COMMAND_RELOAD)).stream().map(BaseMessage::getMessage).collect(Collectors.toSet());
+
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
             StringUtil.copyPartialMatches(args[0], mainSub, completions);
-        } else if (args.length == 2) {
-        } else if (args.length == 3) {
+        } else if (args.length >= 2) {
+            if (args[1].equals(BaseMessage.COMMAND_ADD.getMessage())) {
+                StringUtil.copyPartialMatches(args[args.length - 1], Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toSet()), completions);
+            }
         }
         Collections.sort(completions);
         return completions;

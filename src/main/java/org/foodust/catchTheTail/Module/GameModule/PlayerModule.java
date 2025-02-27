@@ -59,7 +59,7 @@ public class PlayerModule {
                     Location masterLoc = master.getLocation();
                     Location slaveLoc = slave.getLocation();
 
-                    if (slaveLoc.distance(masterLoc) > 2) {
+                    if (slaveLoc.distance(masterLoc) > 18) {
                         Vector direction = masterLoc.toVector().subtract(slaveLoc.toVector()).normalize().multiply(1.1);
                         slave.setVelocity(direction);
                     }

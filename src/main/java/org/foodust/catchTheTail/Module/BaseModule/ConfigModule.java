@@ -66,7 +66,7 @@ public class ConfigModule {
                 .getKeys(false)
                 .stream()
                 .toList();
-        String lastKey = keys.isEmpty() ? "0" : keys.get(keys.size() - 1);
+        String lastKey = keys.isEmpty() ? "0" : keys.getLast();
         int i = Integer.parseInt(lastKey) + 1;
         config.set(index + "." + i, serialized);
         saveConfig(config, "baseItem.yml");
