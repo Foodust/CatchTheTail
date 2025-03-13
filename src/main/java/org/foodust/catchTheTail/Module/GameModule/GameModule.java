@@ -29,11 +29,11 @@ public class GameModule {
         this.taskModule = new TaskModule(plugin);
     }
 
-    public boolean checkTailCatch(Player attacker, Player victim) {
+    public void checkTailCatch(Player attacker, Player victim) {
         ItemStack attackerColorWool = attacker.getInventory().getItem(0);
         ItemStack victimColorWool = victim.getInventory().getItem(0);
 
-        if (attackerColorWool == null || victimColorWool == null) return false;
+        if (attackerColorWool == null || victimColorWool == null) return;
 
         // 이미 잡은 꼬리가 있는지 확인
         PlayerInfo attackerInfo = GameData.gamePlayers.get(attacker);
@@ -62,30 +62,17 @@ public class GameModule {
             // 성공적인 꼬리 잡기
             playerModule.bindPlayers(attacker, victim);
             messageModule.sendPlayerC(attacker, "<green>성공적으로 " + victimColorWool.getType().name() + " 꼬리를 잡았습니다!</green>");
-            return true;
         } else {
             // 잘못된 꼬리 잡기 - 수정된 부분
-            // 공격자를 탈락시키고 크기를 작게 만든다
             attackerInfo.setEliminated(true);
-
-            try {
-                attacker.registerAttribute(Attribute.SCALE);
-                AttributeInstance attribute = attacker.getAttribute(Attribute.SCALE);
-                if (attribute != null) {
-                    attribute.setBaseValue(0.5); // 크기를 더 작게 설정
-                }
-            } catch (Exception ignore) {
-            }
-
+            playerModule.bindPlayers(victim, attacker);
             // 피해자를 그 자리에서 부활
             taskModule.runBukkitTaskLater(() -> {
                 victim.spawnAt(victim.getLocation());
-                victim.setHealth(victim.getMaxHealth());
-            }, 1L);
+            }, 20L);
 
             messageModule.sendPlayerC(attacker, "<red>잘못된 꼬리를 잡아 탈락되었습니다! " + shouldCatch.name() + " 꼬리를 잡아야 합니다.</red>");
             messageModule.broadcastMessageC("<red>" + attacker.getName() + "님이 잘못된 꼬리를 잡아 탈락했습니다!</red>");
-            return false;
         }
     }
 
