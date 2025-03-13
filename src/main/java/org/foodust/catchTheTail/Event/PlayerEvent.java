@@ -21,15 +21,17 @@ public class PlayerEvent implements Listener {
 
     @EventHandler
     public void playerDeathEvent(PlayerDeathEvent event) {
-        if(!GameData.isGameRunning) return;
+        if (!GameData.isGameRunning) return;
         Player victim = event.getEntity();
         if (!(victim.getKiller() instanceof Player attacker)) return;
-        gameModule.checkTailCatch(attacker, victim);
+        if (!gameModule.checkTailCatch(attacker, victim)) {
+            attacker.spawnAt(victim.getLocation());
+        }
     }
 
     @EventHandler
     public void playerEntityDamageEvent(EntityDamageByEntityEvent event) {
-        if(!GameData.isGameRunning) return;
+        if (!GameData.isGameRunning) return;
         if (!(event.getDamager() instanceof Player attacker)) return;
         if (!(event.getEntity() instanceof Player victim)) return;
         gameModule.checkAttackSlaveToMaster(event, attacker, victim);

@@ -23,11 +23,11 @@ public class GameModule {
         this.messageModule = new MessageModule(plugin);
     }
 
-    public void checkTailCatch(Player attacker, Player victim) {
+    public boolean checkTailCatch(Player attacker, Player victim) {
         ItemStack attackerColorWool = attacker.getInventory().getItem(0);
         ItemStack victimColorWool = victim.getInventory().getItem(0);
 
-        if (attackerColorWool == null || victimColorWool == null) return;
+        if (attackerColorWool == null || victimColorWool == null) return false;
 
         // 이미 잡은 꼬리가 있는지 확인
         PlayerInfo attackerInfo = GameData.gamePlayers.get(attacker);
@@ -56,10 +56,12 @@ public class GameModule {
             // 성공적인 꼬리 잡기
             playerModule.bindPlayers(attacker, victim);
             messageModule.sendPlayerC(attacker, "<green>성공적으로 " + victimColorWool.getType().name() + " 꼬리를 잡았습니다!</green>");
+            return true;
         } else {
             // 잘못된 꼬리 잡기
             playerModule.bindPlayers(victim, attacker);
             messageModule.sendPlayerC(attacker, "<red>잘못된 꼬리를 잡았습니다! " + shouldCatch.name() + " 꼬리를 잡아야 합니다.</red>");
+            return false;
         }
     }
 
