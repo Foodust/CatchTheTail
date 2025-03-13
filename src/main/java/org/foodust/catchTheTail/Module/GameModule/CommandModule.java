@@ -53,13 +53,13 @@ public class CommandModule {
             return;
         }
         List<String> playerNames = new ArrayList<>(new HashSet<>(Arrays.asList(data).subList(1, data.length)));
-        for (int i = 1; i < playerNames.size(); i++) {
+        for (int i = 0; i < playerNames.size(); i++) {
             String playerName = playerNames.get(i);
             Player player = Bukkit.getPlayer(playerName);
             if (player == null) {
                 messageModule.sendPlayerC(sender, playerName + " 는 등록되지 않았습니다.");
             } else {
-                playerModule.setupPlayer(player, String.valueOf(i));
+                playerModule.setupPlayer(player, String.valueOf(i+1)); // 인덱스를 1부터 시작하도록 수정
                 messageModule.sendPlayerC(sender, playerName + " 는 등록 되었습니다.");
             }
         }

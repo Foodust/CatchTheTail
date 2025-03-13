@@ -36,7 +36,7 @@ public class GameData {
             try {
                 AttributeInstance attribute = player.getAttribute(Attribute.SCALE);
                 if (attribute != null) {
-                    attribute.setBaseValue(1);
+                    attribute.setBaseValue(1.0);
                 }
             } catch (Exception ignore) {
             }
