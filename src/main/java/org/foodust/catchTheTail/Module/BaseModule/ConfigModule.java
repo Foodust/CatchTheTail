@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.foodust.catchTheTail.CatchTheTail;
 import org.foodust.catchTheTail.Data.AnimateData;
+import org.foodust.catchTheTail.Data.ConfigData;
 import org.foodust.catchTheTail.Data.GameData;
 import org.foodust.catchTheTail.Data.TaskData;
 
@@ -48,6 +49,13 @@ public class ConfigModule {
     }
 
     public void initialize() {
+        // Save default config
+        plugin.saveDefaultConfig();
+        // Load config
+        plugin.reloadConfig();
+        // Load config values
+        ConfigData.loadConfig(plugin);
+        // Release previous game data
         release();
     }
 

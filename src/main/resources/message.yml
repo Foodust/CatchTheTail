@@ -1,0 +1,29 @@
+settings:
+  messages:
+    game_start_1: "1"
+    game_start_2: "2"
+    game_start_3: "3"
+    game_start: "<green>꼬리잡기 게임이 시작되었습니다!</green>"
+    game_start_instruction: "<yellow>다른 플레이어의 꼬리를 잡아 노예로 만드세요!</yellow>"
+    game_win: "<gold>축하합니다! %player%님이 게임에서 승리했습니다!</gold>"
+
+  sounds:
+    game_start:
+      sound: "ENTITY_ENDER_DRAGON_GROWL"
+      volume: 1.0
+      pitch: 1.0
+
+    game_win:
+      sound: "UI_TOAST_CHALLENGE_COMPLETE"
+      volume: 1.0
+      pitch: 1.0
+
+    tail_catch:
+      sound: "ENTITY_PLAYER_LEVELUP"
+      volume: 1.0
+      pitch: 1.0
+
+    tail_fail:
+      sound: "ENTITY_VILLAGER_HURT"
+      volume: 1.0
+      pitch: 0.5

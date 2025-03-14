@@ -13,6 +13,7 @@ import org.foodust.catchTheTail.Module.BaseModule.MessageModule;
 import org.foodust.catchTheTail.Module.BaseModule.TaskModule;
 
 import java.util.List;
+import java.util.Map;
 
 public class GameModule {
     private final CatchTheTail plugin;
@@ -30,10 +31,18 @@ public class GameModule {
     }
 
     public void checkTailCatch(Player attacker, Player victim) {
+        for (Map.Entry<Player, PlayerInfo> entry : GameData.gamePlayers.entrySet()) {
+            Player player = entry.getKey();
+            PlayerInfo playerInfo = entry.getValue();
+            if (player.equals(victim) && playerInfo.getMaster() != null) {
+                return;
+            }
+        }
         ItemStack attackerColorWool = attacker.getInventory().getItem(0);
         ItemStack victimColorWool = victim.getInventory().getItem(0);
 
-        if (attackerColorWool == null || victimColorWool == null) return;
+        if (attackerColorWool == null || victimColorWool == null)
+            return;
 
         // 이미 잡은 꼬리가 있는지 확인
         PlayerInfo attackerInfo = GameData.gamePlayers.get(attacker);
