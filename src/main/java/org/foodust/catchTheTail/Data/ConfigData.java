@@ -60,7 +60,6 @@ public class ConfigData {
         sounds.clear();
     }
 
-    @Getter
     public record SoundInfo(Sound sound, float volume, float pitch) {
     }
 }
