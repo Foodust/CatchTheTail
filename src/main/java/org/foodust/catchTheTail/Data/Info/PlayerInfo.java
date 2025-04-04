@@ -1,6 +1,7 @@
 package org.foodust.catchTheTail.Data.Info;
 
 import lombok.*;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -31,6 +32,9 @@ public class PlayerInfo {
     private boolean disconnected = false;
     @Builder.Default
     private String lastKnownName = "";
+
+    private Material realWool;
+
     @Builder.Default
     private String index = "-1";
 }

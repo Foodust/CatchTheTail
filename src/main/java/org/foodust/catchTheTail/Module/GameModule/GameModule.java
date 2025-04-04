@@ -36,7 +36,7 @@ public class GameModule {
             if (player != null && player.isOnline()) {
                 ItemStack woolItem = player.getInventory().getItem(0);
                 if (woolItem != null && isWoolMaterial(woolItem.getType())) {
-                    playerInfo.setWoolColor(woolItem.getType());
+                    playerInfo.setRealWool(woolItem.getType());
                 }
             }
         });
@@ -54,18 +54,10 @@ public class GameModule {
     public void checkTailCatch(Player attacker, Player victim) {
         // Check if victim is already a slave
         PlayerInfo victimInfo = GameData.getPlayerInfo(victim);
-        if (victimInfo != null && victimInfo.getMaster() != null) {
-            return;
-        }
-
-        ItemStack attackerColorWool = attacker.getInventory().getItem(0);
-        ItemStack victimColorWool = victim.getInventory().getItem(0);
-
-        if (attackerColorWool == null || victimColorWool == null)
-            return;
-
         // 이미 잡은 꼬리가 있는지 확인
         PlayerInfo attackerInfo = GameData.getPlayerInfo(attacker);
+
+        Material attackerColorWool = attackerInfo.getRealWool();
         List<Player> attackerSlaves = attackerInfo.getSlaves();
 
         // 잡아야 하는 다음 꼬리 색 결정
@@ -73,36 +65,32 @@ public class GameModule {
 
         if (attackerSlaves.isEmpty()) {
             // 첫 번째 꼬리를 잡는 경우
-            shouldCatch = tailModule.getNextColor(attackerColorWool.getType());
+            shouldCatch = tailModule.getNextColor(attackerColorWool);
         } else {
             // 이미 꼬리가 있는 경우, 마지막 꼬리의 다음 색깔을 확인
             Player lastSlave = attackerSlaves.get(attackerSlaves.size() - 1);
-            ItemStack lastSlaveColorWool = lastSlave.getInventory().getItem(0);
+            PlayerInfo lastSlaveInfo = GameData.gamePlayers.get(lastSlave.getUniqueId());
 
-            // 마지막 꼬리가 색깔을 가지고 있지 않은 경우(예외 상황)
-            shouldCatch = tailModule.getNextColor(Objects.requireNonNullElse(lastSlaveColorWool, attackerColorWool).getType());
+            shouldCatch = tailModule.getNextColor(lastSlaveInfo.getRealWool());
         }
 
-        // Store the victim's color for reconnection
-        assert victimInfo != null;
-
-        if (victimColorWool.getType() == shouldCatch) {
+        if (victimInfo.getRealWool() == shouldCatch) {
             // 성공적인 꼬리 잡기
             playerModule.bindPlayers(attacker, victim);
             messageModule.sendPlayerC(attacker, "<green>성공적으로 꼬리를 잡았습니다!</green>");
-            Bukkit.dispatchCommand(victim,"scale set 0.5");
-            Bukkit.dispatchCommand(victim,"scale set pehkui:motion 1.5");
-            Bukkit.dispatchCommand(victim,"scale set pehkui:jump_height 1.2");
-            Bukkit.dispatchCommand(victim,"scale persist set true");
+            Bukkit.dispatchCommand(victim, "scale set 0.5");
+            Bukkit.dispatchCommand(victim, "scale set pehkui:motion 1.5");
+            Bukkit.dispatchCommand(victim, "scale set pehkui:jump_height 1.2");
+            Bukkit.dispatchCommand(victim, "scale persist set true");
         } else {
             // 잘못된 꼬리 잡기 - 수정된 부분
             attackerInfo.setEliminated(true);
             playerModule.bindPlayers(victim, attacker);
 
-            Bukkit.dispatchCommand(attacker,"scale set 0.5");
-            Bukkit.dispatchCommand(attacker,"scale set pehkui:motion 1.5");
-            Bukkit.dispatchCommand(attacker,"scale set pehkui:jump_height 1.2");
-            Bukkit.dispatchCommand(attacker,"scale persist set true");
+            Bukkit.dispatchCommand(attacker, "scale set 0.5");
+            Bukkit.dispatchCommand(attacker, "scale set pehkui:motion 1.5");
+            Bukkit.dispatchCommand(attacker, "scale set pehkui:jump_height 1.2");
+            Bukkit.dispatchCommand(attacker, "scale persist set true");
             // 피해자를 그 자리에서 부활
             taskModule.runBukkitTaskLater(() -> {
                 victim.spawnAt(victim.getLocation());

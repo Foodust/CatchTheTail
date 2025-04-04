@@ -56,9 +56,7 @@ public class CommandModule {
                     });
 
                     // Initialize player colors after items are given
-                    taskModule.runBukkitTaskLater(() -> {
-                        gameModule.initializePlayerColors();
-                    }, 5L);
+                    taskModule.runBukkitTaskLater(gameModule::initializePlayerColors, 5L);
 
                     // 게임 시작 메시지 전송
                     String startMessage = ConfigData.getMessage("game_start");
