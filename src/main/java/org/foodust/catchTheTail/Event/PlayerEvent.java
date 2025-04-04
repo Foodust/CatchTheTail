@@ -16,6 +16,7 @@ public class PlayerEvent implements Listener {
 
     private final GameModule gameModule;
     private final GameEndModule gameEndModule;
+
     public PlayerEvent(CatchTheTail plugin) {
         this.gameModule = new GameModule(plugin);
         this.gameEndModule = new GameEndModule(plugin);
@@ -25,7 +26,8 @@ public class PlayerEvent implements Listener {
     public void playerDeathEvent(PlayerDeathEvent event) {
         if (!GameData.isGameRunning) return;
         Player victim = event.getEntity();
-        if (!(victim.getKiller() instanceof Player attacker)) return;
+        Player attacker = victim.getKiller();
+        if (attacker == null) return;
         gameModule.checkTailCatch(attacker, victim);
         gameEndModule.checkGameEnd();
     }

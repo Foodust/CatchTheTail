@@ -49,10 +49,6 @@ public class ConfigModule {
     }
 
     public void initialize() {
-        // Save default config
-        plugin.saveDefaultConfig();
-        // Load config
-        plugin.reloadConfig();
         // Load config values
         ConfigData.loadConfig(plugin);
         // Release previous game data
@@ -74,7 +70,7 @@ public class ConfigModule {
                 .getKeys(false)
                 .stream()
                 .toList();
-        String lastKey = keys.isEmpty() ? "0" : keys.getLast();
+        String lastKey = keys.isEmpty() ? "0" : keys.get(keys.size() - 1);
         int i = Integer.parseInt(lastKey) + 1;
         config.set(index + "." + i, serialized);
         saveConfig(config, "baseItem.yml");

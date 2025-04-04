@@ -22,7 +22,7 @@ public class CommandSub implements TabCompleter {
         if (args.length == 1) {
             StringUtil.copyPartialMatches(args[0], mainSub, completions);
         } else if (args.length >= 2) {
-            if (args[1].equals(BaseMessage.COMMAND_ADD.getMessage())) {
+            if (args[0].equals(BaseMessage.COMMAND_ADD.getMessage())) {
                 StringUtil.copyPartialMatches(args[args.length - 1], Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toSet()), completions);
             }
         }

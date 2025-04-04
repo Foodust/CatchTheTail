@@ -1,5 +1,6 @@
 package org.foodust.catchTheTail.Module.GameModule;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -56,7 +57,7 @@ public class GameModule {
             shouldCatch = tailModule.getNextColor(attackerColorWool.getType());
         } else {
             // 이미 꼬리가 있는 경우, 마지막 꼬리의 다음 색깔을 확인
-            Player lastSlave = attackerSlaves.getLast();
+            Player lastSlave = attackerSlaves.get(attackerSlaves.size() - 1);
             ItemStack lastSlaveColorWool = lastSlave.getInventory().getItem(0);
 
             if (lastSlaveColorWool != null) {
@@ -70,18 +71,24 @@ public class GameModule {
         if (victimColorWool.getType() == shouldCatch) {
             // 성공적인 꼬리 잡기
             playerModule.bindPlayers(attacker, victim);
-            messageModule.sendPlayerC(attacker, "<green>성공적으로 " + victimColorWool.getType().name() + " 꼬리를 잡았습니다!</green>");
+            messageModule.sendPlayerC(attacker, "<green>성공적으로 꼬리를 잡았습니다!</green>");
+            Bukkit.dispatchCommand(victim,"scale set 0.5");
+            Bukkit.dispatchCommand(victim,"scale set pehkui:motion 1.5");
+            Bukkit.dispatchCommand(victim,"scale set pehkui:jump_height 1.2");
         } else {
             // 잘못된 꼬리 잡기 - 수정된 부분
             attackerInfo.setEliminated(true);
             playerModule.bindPlayers(victim, attacker);
+            Bukkit.dispatchCommand(attacker,"scale set 0.5");
+            Bukkit.dispatchCommand(attacker,"scale set pehkui:motion 1.5");
+            Bukkit.dispatchCommand(attacker,"scale set pehkui:jump_height 1.2");
             // 피해자를 그 자리에서 부활
             taskModule.runBukkitTaskLater(() -> {
                 victim.spawnAt(victim.getLocation());
             }, 20L);
 
-            messageModule.sendPlayerC(attacker, "<red>잘못된 꼬리를 잡아 탈락되었습니다! " + shouldCatch.name() + " 꼬리를 잡아야 합니다.</red>");
-            messageModule.broadcastMessageC("<red>" + attacker.getName() + "님이 잘못된 꼬리를 잡아 탈락했습니다!</red>");
+            messageModule.sendPlayerC(attacker, "<bold><red>잘못된 꼬리를 잡아 탈락되었습니다! " + shouldCatch.name() + " 꼬리를 잡아야 합니다.</red>");
+            messageModule.broadcastMessageC("<bold><red>" + attacker.getName() + "님이 잘못된 꼬리를 잡아 탈락했습니다!</red>");
         }
     }
 

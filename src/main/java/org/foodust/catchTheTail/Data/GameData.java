@@ -20,27 +20,23 @@ public class GameData {
     public static boolean isGameRunning = false;
 
     public static final Material[] COLORS = {
-            Material.RED_WOOL,Material.ORANGE_WOOL,Material.YELLOW_WOOL,
-            Material.GREEN_WOOL,Material.LIGHT_BLUE_WOOL,Material.PURPLE_WOOL, Material.WHITE_WOOL,
+            Material.RED_WOOL, Material.ORANGE_WOOL, Material.YELLOW_WOOL,
+            Material.GREEN_WOOL, Material.LIGHT_BLUE_WOOL, Material.PURPLE_WOOL, Material.WHITE_WOOL,
     };
 
     public static List<Material> activeColors = new ArrayList<>();
 
     public static void release() {
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            Bukkit.dispatchCommand(player, "scale reset");
+        });
+
         isGameRunning = false;
         gamePlayers.clear();
         baseItems.clear();
         activeColors.clear();
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            try {
-                AttributeInstance attribute = player.getAttribute(Attribute.SCALE);
-                if (attribute != null) {
-                    attribute.setBaseValue(1.0);
-                }
-            } catch (Exception ignore) {
-            }
-        });
     }
 
 }

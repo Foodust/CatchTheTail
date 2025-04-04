@@ -41,7 +41,7 @@ public class CommandModule {
         GameData.isGameRunning = true;
 
         BukkitTask bukkitTask = new BukkitRunnable() {
-            int time = 1;
+            int time = 0;
 
             @Override
             public void run() {
@@ -69,13 +69,13 @@ public class CommandModule {
                     String instructionMessage = ConfigData.getMessage("game_start_instruction");
                     if (!instructionMessage.isEmpty()) {
                         GameData.gamePlayers.keySet().forEach(player -> {
-                            messageModule.sendPlayerActionBar(player, instructionMessage);
+                            messageModule.sendTitle(player, instructionMessage,0,1,0);
                         });
                     }
                     this.cancel();
                 } else {
                     Bukkit.getOnlinePlayers().forEach(player -> {
-                        messageModule.sendPlayerActionBar(player, ConfigData.getMessage("game_start_" + time));
+                        messageModule.sendTitle(player, ConfigData.getMessage("game_start_" + time), 0, 1, 0);
                     });
                 }
             }

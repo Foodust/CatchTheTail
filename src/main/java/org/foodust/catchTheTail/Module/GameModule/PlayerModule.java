@@ -38,14 +38,6 @@ public class PlayerModule {
         PlayerInfo slaveInfo = GameData.gamePlayers.get(slave);
 
         if (masterInfo != null && slaveInfo != null) {
-            try {
-                slave.registerAttribute(Attribute.SCALE);
-                AttributeInstance attribute = slave.getAttribute(Attribute.SCALE);
-                if (attribute != null) {
-                    attribute.setBaseValue(0.7);
-                }
-            } catch (Exception ignore) {
-            }
 
             slaveInfo.setMaster(master);
             masterInfo.getSlaves().add(slave);
@@ -63,7 +55,7 @@ public class PlayerModule {
                     Location slaveLoc = slave.getLocation();
 
                     if (slaveLoc.distance(masterLoc) > 10) { // 거리 10칸으로 수정
-                        Vector direction = masterLoc.toVector().subtract(slaveLoc.toVector()).normalize().multiply(1.5);
+                        Vector direction = masterLoc.toVector().subtract(slaveLoc.toVector()).normalize().multiply(1.5).add(new Vector(0, 0.5, 0));
                         slave.setVelocity(direction);
                         messageModule.sendPlayerActionBar(slave, "<yellow>주인에게 당겨집니다...</yellow>");
                     }
