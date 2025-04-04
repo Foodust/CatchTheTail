@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.foodust.catchTheTail.CatchTheTail;
 import org.foodust.catchTheTail.Data.ConfigData;
 import org.foodust.catchTheTail.Data.GameData;
+import org.foodust.catchTheTail.Data.Info.PlayerInfo;
 import org.foodust.catchTheTail.Module.BaseModule.ConfigModule;
 import org.foodust.catchTheTail.Module.BaseModule.MessageModule;
 
@@ -31,9 +32,9 @@ public class GameEndModule {
         if (!GameData.isGameRunning)
             return false;
 
-        // Count active masters (players who aren't eliminated and aren't slaves)
-        long activeMasters = GameData.gamePlayers.entrySet().stream()
-                .filter(entry -> !entry.getValue().isEliminated() && entry.getValue().getMaster() == null)
+        // Count active masters (players who aren't eliminated, aren't disconnected, and aren't slaves)
+        long activeMasters = GameData.gamePlayers.values().stream()
+                .filter(info -> !info.isEliminated() && !info.isDisconnected() && info.getMaster() == null)
                 .count();
 
         // If there's only one or zero active masters, end the game
@@ -41,9 +42,9 @@ public class GameEndModule {
             // Find the winner (if there is one)
             Player winner = null;
             if (activeMasters == 1) {
-                winner = GameData.gamePlayers.entrySet().stream()
-                        .filter(entry -> !entry.getValue().isEliminated() && entry.getValue().getMaster() == null)
-                        .map(Map.Entry::getKey)
+                winner = GameData.gamePlayers.values().stream()
+                        .filter(info -> !info.isEliminated() && !info.isDisconnected() && info.getMaster() == null)
+                        .map(PlayerInfo::getPlayer)
                         .findFirst()
                         .orElse(null);
             }

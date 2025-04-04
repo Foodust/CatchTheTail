@@ -1,9 +1,6 @@
 package org.foodust.catchTheTail.Module.GameModule;
 
-import lombok.Getter;
 import org.bukkit.Location;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -30,23 +27,26 @@ public class PlayerModule {
                 .player(player)
                 .index(index)
                 .build();
-        GameData.gamePlayers.put(player, info);
+        // Store using UUID as key
+        GameData.gamePlayers.put(player.getUniqueId(), info);
     }
 
     public void bindPlayers(Player master, Player slave) {
-        PlayerInfo masterInfo = GameData.gamePlayers.get(master);
-        PlayerInfo slaveInfo = GameData.gamePlayers.get(slave);
+        PlayerInfo masterInfo = GameData.getPlayerInfo(master);
+        PlayerInfo slaveInfo = GameData.getPlayerInfo(slave);
 
         if (masterInfo != null && slaveInfo != null) {
-
             slaveInfo.setMaster(master);
+            slaveInfo.setMasterUUID(master.getUniqueId());
             masterInfo.getSlaves().add(slave);
+            masterInfo.getSlavesUUIDs().add(slave.getUniqueId());
 
             // 노예 플레이어를 주인 근처로 계속 텔레포트 - 거리 수정
             BukkitTask bukkitTask = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (!GameData.isGameRunning || slave.getWorld() != master.getWorld() || masterInfo.isEliminated()) {
+                    if (!GameData.isGameRunning || slave.getWorld() != master.getWorld() ||
+                            masterInfo.isEliminated() || !slave.isOnline() || !master.isOnline()) {
                         this.cancel();
                         return;
                     }
@@ -60,7 +60,7 @@ public class PlayerModule {
                         messageModule.sendPlayerActionBar(slave, "<yellow>주인에게 당겨집니다...</yellow>");
                     }
                 }
-            }.runTaskTimer(plugin, 0L, 1L);
+            }.runTaskTimer(plugin, 0L, 20L);
             TaskData.TASKS.add(bukkitTask);
         }
     }

@@ -23,6 +23,7 @@ public class CommandModule {
     private final PlayerModule playerModule;
     private final TailModule tailModule;
     private final MessageModule messageModule;
+    private final GameModule gameModule;
 
     public CommandModule(CatchTheTail plugin) {
         this.plugin = plugin;
@@ -31,6 +32,7 @@ public class CommandModule {
         this.messageModule = new MessageModule(plugin);
         this.tailModule = new TailModule(plugin);
         this.taskModule = new TaskModule(plugin);
+        this.gameModule = new GameModule(plugin);
     }
 
     public void commandStart(CommandSender sender, String[] data) {
@@ -47,10 +49,16 @@ public class CommandModule {
             public void run() {
                 if (time++ >= 3) {
                     // 각 플레이어에게 기본 아이템 지급
-                    GameData.gamePlayers.forEach((player, playerInfo) -> {
-                        configModule.getBaseItem(player, playerInfo.getIndex());
+                    GameData.gamePlayers.values().forEach(playerInfo -> {
+                        if (playerInfo.getPlayer() != null && playerInfo.getPlayer().isOnline()) {
+                            configModule.getBaseItem(playerInfo.getPlayer(), playerInfo.getIndex());
+                        }
                     });
 
+                    // Initialize player colors after items are given
+                    taskModule.runBukkitTaskLater(() -> {
+                        gameModule.initializePlayerColors();
+                    }, 5L);
 
                     // 게임 시작 메시지 전송
                     String startMessage = ConfigData.getMessage("game_start");
@@ -60,7 +68,7 @@ public class CommandModule {
                     // 게임 시작 사운드 재생
                     ConfigData.SoundInfo startSound = ConfigData.getSound("game_start");
                     if (startSound != null) {
-                        GameData.gamePlayers.keySet().forEach(player -> {
+                        Bukkit.getOnlinePlayers().forEach(player -> {
                             player.playSound(player, startSound.sound(), 1f, 1f);
                         });
                     }
@@ -68,8 +76,8 @@ public class CommandModule {
                     // 게임 시작 안내 액션바 메시지 전송
                     String instructionMessage = ConfigData.getMessage("game_start_instruction");
                     if (!instructionMessage.isEmpty()) {
-                        GameData.gamePlayers.keySet().forEach(player -> {
-                            messageModule.sendTitle(player, instructionMessage,0,1,0);
+                        Bukkit.getOnlinePlayers().forEach(player -> {
+                            messageModule.sendTitle(player, instructionMessage, 0, 1, 0);
                         });
                     }
                     this.cancel();
@@ -82,10 +90,10 @@ public class CommandModule {
         }.runTaskTimer(plugin, 0, 20L);
         TaskData.TASKS.add(bukkitTask);
 
-
         tailModule.initializeColors();
     }
 
+    // Other methods remain the same
     public void commandStop(CommandSender sender, String[] data) {
         configModule.initialize();
         messageModule.broadcastMessageC("게임이 종료 되었습니다.");
@@ -127,5 +135,4 @@ public class CommandModule {
         configModule.initialize();
         messageModule.sendPlayerC(sender, "리로드 되었습니다.");
     }
-
 }
