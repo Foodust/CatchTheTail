@@ -13,10 +13,8 @@ import java.util.Arrays;
 public class TailModule {
 
     private final CatchTheTail plugin;
-    private final MessageModule messageModule;
     public TailModule(CatchTheTail plugin) {
         this.plugin = plugin;
-        this.messageModule = new MessageModule(plugin);
     }
 
     public void initializeColors() {
