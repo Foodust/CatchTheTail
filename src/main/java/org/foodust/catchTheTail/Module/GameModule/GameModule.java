@@ -34,7 +34,7 @@ public class GameModule {
         GameData.gamePlayers.values().forEach(playerInfo -> {
             Player player = playerInfo.getPlayer();
             if (player != null && player.isOnline()) {
-                ItemStack woolItem = player.getInventory().getItem(0);
+                ItemStack woolItem = player.getInventory().getItem(9);
                 if (woolItem != null && isWoolMaterial(woolItem.getType())) {
                     playerInfo.setRealWool(woolItem.getType());
                 }
