@@ -37,6 +37,9 @@ public class GameModule {
                 ItemStack woolItem = player.getInventory().getItem(9);
                 if (woolItem != null && isWoolMaterial(woolItem.getType())) {
                     playerInfo.setRealWool(woolItem.getType());
+                    messageModule.sendPlayerC(player, "<green>색깔이 " + getWoolColorInKorean(woolItem.getType()) + "로 등록되었습니다!</green>");
+                } else {
+                    messageModule.sendPlayerC(player, "<red>색깔이 없습니다.</red>");
                 }
             }
         });
@@ -52,8 +55,15 @@ public class GameModule {
     }
 
     public void checkTailCatch(Player attacker, Player victim) {
-        // Check if victim is already a slave
+        // Check if victim is already eliminated
         PlayerInfo victimInfo = GameData.getPlayerInfo(victim);
+
+        // If victim is already eliminated, do nothing
+        if (victimInfo.isEliminated()) {
+            messageModule.sendPlayerC(attacker, "<red>이미 탈락한 플레이어입니다!</red>");
+            return;
+        }
+
         // 이미 잡은 꼬리가 있는지 확인
         PlayerInfo attackerInfo = GameData.getPlayerInfo(attacker);
 
@@ -115,5 +125,19 @@ public class GameModule {
         if (victimInfo != null && victimInfo.getSlaves().contains(attacker)) {
             event.setCancelled(true);
         }
+    }
+    public String getWoolColorInKorean(Material woolMaterial) {
+        if (woolMaterial == null) return "알 수 없음";
+
+        return switch (woolMaterial) {
+            case RED_WOOL -> "빨간색";
+            case ORANGE_WOOL -> "주황색";
+            case YELLOW_WOOL -> "노란색";
+            case GREEN_WOOL -> "초록색";
+            case LIGHT_BLUE_WOOL -> "하늘색";
+            case PURPLE_WOOL -> "보라색";
+            case WHITE_WOOL -> "하얀색";
+            default -> "알 수 없음";
+        };
     }
 }
