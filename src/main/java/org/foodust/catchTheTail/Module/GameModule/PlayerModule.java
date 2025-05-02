@@ -11,6 +11,10 @@ import org.foodust.catchTheTail.Data.Info.PlayerInfo;
 import org.foodust.catchTheTail.Data.TaskData;
 import org.foodust.catchTheTail.Module.BaseModule.MessageModule;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class PlayerModule {
     private final CatchTheTail plugin;
     private final TailModule tailModule;
@@ -36,10 +40,32 @@ public class PlayerModule {
         PlayerInfo slaveInfo = GameData.getPlayerInfo(slave);
 
         if (masterInfo != null && slaveInfo != null) {
+            // Store slave's existing slaves before modifying relationships
+            List<Player> slavesOfSlave = new ArrayList<>(slaveInfo.getSlaves());
+
+            // Clear slave's slaves list since they're being transferred
+            slaveInfo.getSlaves().clear();
+            slaveInfo.getSlavesUUIDs().clear();
+
+            // Set slave's master
             slaveInfo.setMaster(master);
             slaveInfo.setMasterUUID(master.getUniqueId());
+
+            // Add slave to master's slaves
             masterInfo.getSlaves().add(slave);
             masterInfo.getSlavesUUIDs().add(slave.getUniqueId());
+
+            // Transfer all slave's slaves to master
+            for (Player slaveOfSlave : slavesOfSlave) {
+                PlayerInfo slaveOfSlaveInfo = GameData.getPlayerInfo(slaveOfSlave);
+                if (slaveOfSlaveInfo != null) {
+                    slaveOfSlaveInfo.setMaster(master);
+                    slaveOfSlaveInfo.setMasterUUID(master.getUniqueId());
+
+                    masterInfo.getSlaves().add(slaveOfSlave);
+                    masterInfo.getSlavesUUIDs().add(slaveOfSlave.getUniqueId());
+                }
+            }
 
             // 노예 플레이어를 주인 근처로 계속 텔레포트 - 거리 수정
             BukkitTask bukkitTask = new BukkitRunnable() {
