@@ -42,6 +42,9 @@ public class CommandModule {
         }
         GameData.isGameRunning = true;
 
+        // 먼저 색상 배열 초기화
+        tailModule.initializeColors();
+
         BukkitTask bukkitTask = new BukkitRunnable() {
             int time = 0;
 
@@ -55,29 +58,32 @@ public class CommandModule {
                         }
                     });
 
-                    // Initialize player colors after items are given
-                    taskModule.runBukkitTaskLater(gameModule::initializePlayerColors, 5L);
+                    // 아이템 지급 직후 즉시 플레이어 색상 초기화 (약간의 지연 추가)
+                    taskModule.runBukkitTaskLater(() -> {
+                        gameModule.initializePlayerColors();
 
-                    // 게임 시작 메시지 전송
-                    String startMessage = ConfigData.getMessage("game_start");
-                    messageModule.broadcastMessageC(startMessage.isEmpty() ?
-                            "<green>게임이 시작되었습니다!</green>" : startMessage);
+                        // 게임 시작 메시지 전송
+                        String startMessage = ConfigData.getMessage("game_start");
+                        messageModule.broadcastMessageC(startMessage.isEmpty() ?
+                                "<green>게임이 시작되었습니다!</green>" : startMessage);
 
-                    // 게임 시작 사운드 재생
-                    ConfigData.SoundInfo startSound = ConfigData.getSound("game_start");
-                    if (startSound != null) {
-                        Bukkit.getOnlinePlayers().forEach(player -> {
-                            player.playSound(player, startSound.sound(), 1f, 1f);
-                        });
-                    }
+                        // 게임 시작 사운드 재생
+                        ConfigData.SoundInfo startSound = ConfigData.getSound("game_start");
+                        if (startSound != null) {
+                            Bukkit.getOnlinePlayers().forEach(player -> {
+                                player.playSound(player, startSound.sound(), 1f, 1f);
+                            });
+                        }
 
-                    // 게임 시작 안내 액션바 메시지 전송
-                    String instructionMessage = ConfigData.getMessage("game_start_instruction");
-                    if (!instructionMessage.isEmpty()) {
-                        Bukkit.getOnlinePlayers().forEach(player -> {
-                            messageModule.sendTitle(player, instructionMessage, 0, 1, 0);
-                        });
-                    }
+                        // 게임 시작 안내 액션바 메시지 전송
+                        String instructionMessage = ConfigData.getMessage("game_start_instruction");
+                        if (!instructionMessage.isEmpty()) {
+                            Bukkit.getOnlinePlayers().forEach(player -> {
+                                messageModule.sendTitle(player, instructionMessage, 0, 1, 0);
+                            });
+                        }
+                    }, 10L); // 10틱(0.5초) 기다린 후 실행
+
                     this.cancel();
                 } else {
                     Bukkit.getOnlinePlayers().forEach(player -> {
@@ -87,8 +93,6 @@ public class CommandModule {
             }
         }.runTaskTimer(plugin, 0, 20L);
         TaskData.TASKS.add(bukkitTask);
-
-        tailModule.initializeColors();
     }
 
     // Other methods remain the same

@@ -40,12 +40,8 @@ public class PlayerModule {
         PlayerInfo slaveInfo = GameData.getPlayerInfo(slave);
 
         if (masterInfo != null && slaveInfo != null) {
-            // Store slave's existing slaves before modifying relationships
-            List<Player> slavesOfSlave = new ArrayList<>(slaveInfo.getSlaves());
-
-            // Clear slave's slaves list since they're being transferred
-            slaveInfo.getSlaves().clear();
-            slaveInfo.getSlavesUUIDs().clear();
+            // 변경: slave가 가진 slave들은 건드리지 않고 그대로 유지함
+            // (이전 코드에서는 여기서 slavesOfSlave 리스트를 생성했음)
 
             // Set slave's master
             slaveInfo.setMaster(master);
@@ -55,17 +51,8 @@ public class PlayerModule {
             masterInfo.getSlaves().add(slave);
             masterInfo.getSlavesUUIDs().add(slave.getUniqueId());
 
-            // Transfer all slave's slaves to master
-            for (Player slaveOfSlave : slavesOfSlave) {
-                PlayerInfo slaveOfSlaveInfo = GameData.getPlayerInfo(slaveOfSlave);
-                if (slaveOfSlaveInfo != null) {
-                    slaveOfSlaveInfo.setMaster(master);
-                    slaveOfSlaveInfo.setMasterUUID(master.getUniqueId());
-
-                    masterInfo.getSlaves().add(slaveOfSlave);
-                    masterInfo.getSlavesUUIDs().add(slaveOfSlave.getUniqueId());
-                }
-            }
+            // 변경: slave의 slave들은 그대로 slave에게 연결된 상태 유지
+            // (이전 코드에서는 여기서 slave의 slave를 master에게 연결했음)
 
             // 노예 플레이어를 주인 근처로 계속 텔레포트 - 거리 수정
             BukkitTask bukkitTask = new BukkitRunnable() {

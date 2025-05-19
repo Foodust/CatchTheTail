@@ -38,8 +38,11 @@ public class GameModule {
                 if (woolItem != null && isWoolMaterial(woolItem.getType())) {
                     playerInfo.setRealWool(woolItem.getType());
                     messageModule.sendPlayerC(player, "<green>색깔이 " + getWoolColorInKorean(woolItem.getType()) + "로 등록되었습니다!</green>");
+                    // 디버그 로그 추가
+                    plugin.getLog().info(player.getName() + "의 색상이 " + woolItem.getType().name() + "로 등록됨");
                 } else {
                     messageModule.sendPlayerC(player, "<red>색깔이 없습니다.</red>");
+                    plugin.getLog().warning(player.getName() + "의 색상 등록 실패 - 아이템 없음");
                 }
             }
         });
@@ -70,6 +73,10 @@ public class GameModule {
         Material attackerColorWool = attackerInfo.getRealWool();
         List<Player> attackerSlaves = attackerInfo.getSlaves();
 
+        // 디버깅 로그 추가
+        plugin.getLog().info("공격자: " + attacker.getName() + ", 색상: " + attackerColorWool);
+        plugin.getLog().info("피해자: " + victim.getName() + ", 색상: " + victimInfo.getRealWool());
+
         // 잡아야 하는 다음 꼬리 색 결정
         Material shouldCatch;
 
@@ -83,6 +90,9 @@ public class GameModule {
 
             shouldCatch = tailModule.getNextColor(lastSlaveInfo.getRealWool());
         }
+
+        // 디버깅 로그 추가
+        plugin.getLog().info("잡아야 하는 색상: " + shouldCatch);
 
         if (victimInfo.getRealWool() == shouldCatch) {
             // 성공적인 꼬리 잡기
@@ -106,7 +116,7 @@ public class GameModule {
                 victim.spawnAt(victim.getLocation());
             }, 20L);
 
-            messageModule.sendPlayerC(attacker, "<bold><red>잘못된 꼬리를 잡아 탈락되었습니다! " + shouldCatch.name() + " 꼬리를 잡아야 합니다.</red>");
+            messageModule.sendPlayerC(attacker, "<bold><red>잘못된 꼬리를 잡아 탈락되었습니다! " + getWoolColorInKorean(shouldCatch) + " 꼬리를 잡아야 합니다.</red>");
             messageModule.broadcastMessageC("<bold><red>" + attacker.getName() + "님이 잘못된 꼬리를 잡아 탈락했습니다!</red>");
         }
     }
@@ -126,6 +136,7 @@ public class GameModule {
             event.setCancelled(true);
         }
     }
+
     public String getWoolColorInKorean(Material woolMaterial) {
         if (woolMaterial == null) return "알 수 없음";
 
