@@ -12,7 +12,6 @@ import org.foodust.catchTheTail.Module.BaseModule.MessageModule;
 import org.foodust.catchTheTail.Module.BaseModule.TaskModule;
 
 import java.util.List;
-import java.util.Objects;
 
 public class GameModule {
     private final CatchTheTail plugin;
@@ -71,7 +70,6 @@ public class GameModule {
         PlayerInfo attackerInfo = GameData.getPlayerInfo(attacker);
 
         Material attackerColorWool = attackerInfo.getRealWool();
-        List<Player> attackerSlaves = attackerInfo.getSlaves();
 
         // 디버깅 로그 추가
         plugin.getLog().info("공격자: " + attacker.getName() + ", 색상: " + attackerColorWool);
@@ -80,16 +78,7 @@ public class GameModule {
         // 잡아야 하는 다음 꼬리 색 결정
         Material shouldCatch;
 
-        if (attackerSlaves.isEmpty()) {
-            // 첫 번째 꼬리를 잡는 경우
-            shouldCatch = tailModule.getNextColor(attackerColorWool);
-        } else {
-            // 이미 꼬리가 있는 경우, 마지막 꼬리의 다음 색깔을 확인
-            Player lastSlave = attackerSlaves.get(attackerSlaves.size() - 1);
-            PlayerInfo lastSlaveInfo = GameData.gamePlayers.get(lastSlave.getUniqueId());
-
-            shouldCatch = tailModule.getNextColor(lastSlaveInfo.getRealWool());
-        }
+        shouldCatch = tailModule.getNextColor(attackerColorWool);
 
         // 디버깅 로그 추가
         plugin.getLog().info("잡아야 하는 색상: " + shouldCatch);
@@ -102,22 +91,20 @@ public class GameModule {
             Bukkit.dispatchCommand(victim, "scale set pehkui:motion 1.5");
             Bukkit.dispatchCommand(victim, "scale set pehkui:jump_height 1.2");
             Bukkit.dispatchCommand(victim, "scale persist set true");
+
+            GameData.eliminateColors.add(victimInfo.getRealWool());
         } else {
             // 잘못된 꼬리 잡기 - 수정된 부분
             attackerInfo.setEliminated(true);
             playerModule.bindPlayers(victim, attacker);
-
             Bukkit.dispatchCommand(attacker, "scale set 0.5");
             Bukkit.dispatchCommand(attacker, "scale set pehkui:motion 1.5");
             Bukkit.dispatchCommand(attacker, "scale set pehkui:jump_height 1.2");
             Bukkit.dispatchCommand(attacker, "scale persist set true");
-            // 피해자를 그 자리에서 부활
-            taskModule.runBukkitTaskLater(() -> {
-                victim.spawnAt(victim.getLocation());
-            }, 20L);
-
             messageModule.sendPlayerC(attacker, "<bold><red>잘못된 꼬리를 잡아 탈락되었습니다! " + getWoolColorInKorean(shouldCatch) + " 꼬리를 잡아야 합니다.</red>");
             messageModule.broadcastMessageC("<bold><red>" + attacker.getName() + "님이 잘못된 꼬리를 잡아 탈락했습니다!</red>");
+
+            GameData.eliminateColors.add(attackerInfo.getRealWool());
         }
     }
 

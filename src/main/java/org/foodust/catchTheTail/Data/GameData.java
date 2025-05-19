@@ -24,6 +24,7 @@ public class GameData {
     };
 
     public static List<Material> activeColors = new ArrayList<>();
+    public static List<Material> eliminateColors = new ArrayList<>();
 
     public static void release() {
         Bukkit.getOnlinePlayers().forEach(player -> {
