@@ -2,7 +2,9 @@ package org.foodust.catchTheTail.Module.GameModule;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.foodust.catchTheTail.CatchTheTail;
@@ -10,8 +12,6 @@ import org.foodust.catchTheTail.Data.GameData;
 import org.foodust.catchTheTail.Data.Info.PlayerInfo;
 import org.foodust.catchTheTail.Module.BaseModule.MessageModule;
 import org.foodust.catchTheTail.Module.BaseModule.TaskModule;
-
-import java.util.List;
 
 public class GameModule {
     private final CatchTheTail plugin;
@@ -85,6 +85,7 @@ public class GameModule {
 
         if (victimInfo.getRealWool() == shouldCatch) {
             // 성공적인 꼬리 잡기
+            victimInfo.setEliminated(true);
             playerModule.bindPlayers(attacker, victim);
             messageModule.sendPlayerC(attacker, "<green>성공적으로 꼬리를 잡았습니다!</green>");
             Bukkit.dispatchCommand(victim, "scale set 0.5");
@@ -119,6 +120,26 @@ public class GameModule {
 
         // 기존 로직 - 노예가 주인을 공격하는 경우
         PlayerInfo victimInfo = GameData.getPlayerInfo(victim);
+        if (victimInfo != null && victimInfo.getSlaves().contains(attacker)) {
+            event.setCancelled(true);
+        }
+    }
+
+    public void checkArrowSlave(EntityDamageByEntityEvent event, Projectile arrow, Player victim) {
+        if (!(arrow.getShooter() instanceof Player attacker)) {
+            return;
+        }
+        PlayerInfo attackerInfo = GameData.getPlayerInfo(attacker);
+
+        if (attackerInfo != null && attackerInfo.getMaster() != null) {
+            event.setCancelled(true);
+            messageModule.sendPlayerC(attacker, "<red>노예는 다른 플레이어를 공격할 수 없습니다!</red>");
+            return;
+        }
+
+        // 기존 로직 - 노예가 주인을 공격하는 경우
+        PlayerInfo victimInfo = GameData.getPlayerInfo(victim);
+
         if (victimInfo != null && victimInfo.getSlaves().contains(attacker)) {
             event.setCancelled(true);
         }

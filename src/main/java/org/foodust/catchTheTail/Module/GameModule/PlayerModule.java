@@ -11,10 +11,6 @@ import org.foodust.catchTheTail.Data.Info.PlayerInfo;
 import org.foodust.catchTheTail.Data.TaskData;
 import org.foodust.catchTheTail.Module.BaseModule.MessageModule;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 public class PlayerModule {
     private final CatchTheTail plugin;
     private final TailModule tailModule;
@@ -58,19 +54,20 @@ public class PlayerModule {
             BukkitTask bukkitTask = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (!GameData.isGameRunning || slave.getWorld() != master.getWorld() ||
-                            masterInfo.isEliminated() || !slave.isOnline() || !master.isOnline()) {
+                    if (!GameData.isGameRunning) {
                         this.cancel();
                         return;
                     }
+                    try {
+                        Location masterLoc = master.getLocation();
+                        Location slaveLoc = slave.getLocation();
 
-                    Location masterLoc = master.getLocation();
-                    Location slaveLoc = slave.getLocation();
-
-                    if (slaveLoc.distance(masterLoc) > 10) { // 거리 10칸으로 수정
-                        Vector direction = masterLoc.toVector().subtract(slaveLoc.toVector()).normalize().multiply(1.5).add(new Vector(0, 0.5, 0));
-                        slave.setVelocity(direction);
-                        messageModule.sendPlayerActionBar(slave, "<yellow>주인에게 당겨집니다...</yellow>");
+                        if (slaveLoc.distance(masterLoc) > 10) { // 거리 10칸으로 수정
+                            Vector direction = masterLoc.toVector().subtract(slaveLoc.toVector()).normalize().multiply(1.5).add(new Vector(0, 0.5, 0));
+                            slave.setVelocity(direction);
+                            messageModule.sendPlayerActionBar(slave, "<yellow>주인에게 당겨집니다...</yellow>");
+                        }
+                    } catch (Exception ignore) {
                     }
                 }
             }.runTaskTimer(plugin, 0L, 20L);

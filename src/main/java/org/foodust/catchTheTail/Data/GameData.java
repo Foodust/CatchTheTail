@@ -35,6 +35,7 @@ public class GameData {
         gamePlayers.clear();
         baseItems.clear();
         activeColors.clear();
+        eliminateColors.clear();
     }
 
     // Helper method to find PlayerInfo by Player object

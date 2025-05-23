@@ -1,14 +1,16 @@
 package org.foodust.catchTheTail.Event;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent; // 추가된 import
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.foodust.catchTheTail.CatchTheTail;
 import org.foodust.catchTheTail.Data.GameData;
 import org.foodust.catchTheTail.Data.Info.PlayerInfo;
@@ -57,8 +59,12 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void playerEntityDamageEvent(EntityDamageByEntityEvent event) {
         if (!GameData.isGameRunning) return;
-        if (!(event.getDamager() instanceof Player attacker)) return;
+
         if (!(event.getEntity() instanceof Player victim)) return;
+        if (event.getDamager() instanceof Projectile arrow)
+            gameModule.checkArrowSlave(event, arrow, victim);
+        if (!(event.getDamager() instanceof Player attacker)) return;
+
         gameModule.checkAttackSlaveToMaster(event, attacker, victim);
     }
 
